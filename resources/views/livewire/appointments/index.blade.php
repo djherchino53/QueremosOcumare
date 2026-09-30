@@ -101,6 +101,8 @@ new class extends Component {
             'patients' => $patientsQuery->get(),
             'doctors' => User::where('role', 'doctor')->orderBy('name')->get(),
             // Para asignar citas: solo médicos activos, más el de la cita que se está editando.
+            'canAttend' => $this->canAttend(),
+            'canSeePayments' => $this->canSeePayments(),
             'assignableDoctors' => User::where('role', 'doctor')
                 ->where(fn ($q) => $q->where('is_active', true)->orWhere('id', $this->doctor_id ?: 0))
                 ->with('specialties.estudios')
@@ -263,8 +265,21 @@ new class extends Component {
         $appointment->delete();
     }
 
+    // Atender: solo super_admin y médicos. Ver y cobrar pagos: super_admin, admin y recepción.
+    private function canAttend(): bool
+    {
+        return in_array(auth()->user()->role, ['super_admin', 'doctor']);
+    }
+
+    private function canSeePayments(): bool
+    {
+        return in_array(auth()->user()->role, ['super_admin', 'admin', 'receptionist']);
+    }
+
     public function attendPatient($appointmentId)
     {
+        abort_unless($this->canAttend(), 403);
+
         $appointment = Appointment::find($appointmentId);
         if ($appointment && in_array($appointment->status, ['pending', 'confirmed'])) {
             $appointment->update(['status' => 'attending']);
@@ -277,6 +292,8 @@ new class extends Component {
 
     public function openPaymentModal($id)
     {
+        abort_unless($this->canSeePayments(), 403);
+
         $appointment = Appointment::with(['patient', 'doctor'])->find($id);
         if (!$appointment) return;
 
@@ -301,6 +318,8 @@ new class extends Component {
 
     public function processPayment()
     {
+        abort_unless($this->canSeePayments(), 403);
+
         $this->validate([
             'payAmount' => 'required|numeric|min:0',
             'payMethod' => 'required|in:Efectivo,Pago Móvil,Transferencia',
@@ -490,8 +509,10 @@ new class extends Component {
                     </th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado
                     </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pago
-                    </th>
+                    @if($canSeePayments)
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pago
+                        </th>
+                    @endif
                     <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones
                     </th>
                 </tr>
@@ -535,6 +556,7 @@ new class extends Component {
                                 {{ $labels[$appointment->status] ?? ucfirst($appointment->status) }}
                             </span>
                         </td>
+                        @if($canSeePayments)
                         <td class="px-6 py-4 whitespace-nowrap text-sm">
                             <div class="font-bold text-gray-900">${{ number_format($appointment->price, 2) }}</div>
                             @if($appointment->payment_status === 'paid')
@@ -565,9 +587,10 @@ new class extends Component {
                                 @endif
                             @endif
                         </td>
+                        @endif
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                             <div class="flex justify-end gap-2">
-                                @if(in_array(auth()->user()->role, ['doctor', 'admin', 'super_admin']) && in_array($appointment->status, ['pending', 'confirmed', 'attending']))
+                                @if($canAttend && in_array($appointment->status, ['pending', 'confirmed', 'attending']))
                                     <button wire:click="attendPatient({{ $appointment->id }})"
                                         class="px-3 py-1 rounded transition text-white flex items-center gap-1 font-semibold text-xs"
                                         style="background-color: {{ $appointment->status === 'attending' ? '#ea580c' : '#16a34a' }};">
