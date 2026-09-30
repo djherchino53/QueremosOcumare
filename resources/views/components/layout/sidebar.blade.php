@@ -57,7 +57,7 @@ new class extends Component { };
                 </a>
             @endif
 
-            @if(in_array(auth()->user()->role, ['super_admin', 'admin', 'doctor']))
+            @if(in_array(auth()->user()->role, ['super_admin', 'admin', 'doctor', 'nurse']))
                 <a href="{{ route('medical-histories.index') }}" wire:navigate
                     class="flex items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-indigo-50 hover:text-indigo-600 {{ request()->routeIs('medical-histories.*') ? 'bg-indigo-50 text-indigo-600' : '' }}">
                     <span class="ml-2">Historias Médicas</span>
@@ -65,7 +65,7 @@ new class extends Component { };
             @endif
 
             {{-- FARMACIA --}}
-            @if(in_array(auth()->user()->role, ['super_admin', 'admin', 'pharmacist']))
+            @if(in_array(auth()->user()->role, ['super_admin', 'admin', 'pharmacist', 'nurse']))
             <div class="pt-4 pb-2">
                 <p class="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Farmacia</p>
             </div>

@@ -204,7 +204,7 @@ new class extends Component {
             </div>
         </a>
 
-        @if (in_array(auth()->user()->role, ['super_admin', 'admin', 'pharmacist']))
+        @if (in_array(auth()->user()->role, ['super_admin', 'admin', 'pharmacist', 'nurse']))
             <!-- Card 4: Insumos -->
             <a href="{{ route('supplies.index') }}" wire:navigate
                 class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 flex items-center justify-between hover:shadow-md transition cursor-pointer group">

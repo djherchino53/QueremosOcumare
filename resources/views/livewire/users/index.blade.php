@@ -152,7 +152,7 @@ new class extends Component {
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     <span
                                         class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                        {{ $user->role === 'super_admin' ? 'bg-purple-100 text-purple-800' : ($user->role === 'doctor' ? 'bg-green-100 text-green-800' : ($user->role === 'pharmacist' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800')) }}">
+                                        {{ $user->role === 'super_admin' ? 'bg-purple-100 text-purple-800' : ($user->role === 'doctor' ? 'bg-green-100 text-green-800' : ($user->role === 'pharmacist' ? 'bg-blue-100 text-blue-800' : ($user->role === 'nurse' ? 'bg-pink-100 text-pink-800' : 'bg-gray-100 text-gray-800'))) }}">
                                         {{ $user->role }}
                                     </span>
                                 </td>
@@ -222,6 +222,7 @@ new class extends Component {
                                     <option value="doctor">Médico</option>
                                     <option value="receptionist">Recepcionista</option>
                                     <option value="pharmacist">Farmacéutico</option>
+                                    <option value="nurse">Enfermera</option>
                                     <option value="admin">Admin</option>
                                     <option value="super_admin">Super Admin</option>
                                 </select>

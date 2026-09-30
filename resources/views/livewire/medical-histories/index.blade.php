@@ -38,7 +38,8 @@ new class extends Component {
         $query = MedicalHistory::with(['patient', 'doctor'])->orderBy('date', 'desc');
 
         // Restricción de visibilidad
-        if (!in_array($user->role, ['super_admin', 'admin'])) {
+        // Admins y enfermería consultan todas las historias.
+        if (!in_array($user->role, ['super_admin', 'admin', 'nurse'])) {
             // Un médico solo ve las historias que él creó (sus pacientes)
             $query->where('doctor_id', $user->id);
         }
@@ -126,6 +127,13 @@ new class extends Component {
             // Al crear, asignar el doctor actual
             $data['doctor_id'] = Auth::id();
             MedicalHistory::create($data);
+        }
+
+        // Las notas de enfermería no cierran la cita: eso le corresponde al médico.
+        if (Auth::user()->role === 'nurse') {
+            $this->appointment_id_filter = null;
+            $this->closeModal();
+            return;
         }
 
         // Marcar la cita como 'atendido' (aplica tanto al crear como al editar una historia médica)

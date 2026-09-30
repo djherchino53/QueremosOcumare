@@ -45,8 +45,15 @@ new class extends Component {
         ];
     }
 
+    // Ingresar insumos: admins y farmacia. Editar y eliminar: solo admins.
+    private function authorizeRoles(array $roles): void
+    {
+        abort_unless(in_array(Auth::user()->role, $roles), 403);
+    }
+
     public function openModal()
     {
+        $this->authorizeRoles(['super_admin', 'admin', 'pharmacist']);
         $this->reset(['name', 'description', 'quantity', 'expiration_date', 'supplyId', 'isEditMode']);
         $this->isModalOpen = true;
     }
@@ -59,6 +66,7 @@ new class extends Component {
 
     public function edit($id)
     {
+        $this->authorizeRoles(['super_admin', 'admin']);
         $supply = Supply::find($id);
         $this->supplyId = $supply->id;
         $this->name = $supply->name;
@@ -79,6 +87,7 @@ new class extends Component {
 
     public function save()
     {
+        $this->authorizeRoles($this->isEditMode ? ['super_admin', 'admin'] : ['super_admin', 'admin', 'pharmacist']);
         $this->validate();
 
         $data = [
@@ -158,6 +167,7 @@ new class extends Component {
 
     public function delete($id)
     {
+        $this->authorizeRoles(['super_admin', 'admin']);
         Supply::find($id)->delete();
     }
 };

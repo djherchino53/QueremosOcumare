@@ -188,7 +188,7 @@ new class extends Component {
         $appointment = Appointment::find($id);
         if (!$appointment) return;
 
-        if (auth()->user()->role === 'receptionist' && in_array($appointment->status, ['attending', 'attended'])) {
+        if (in_array(auth()->user()->role, ['receptionist', 'nurse']) && in_array($appointment->status, ['attending', 'attended'])) {
             return;
         }
 
@@ -238,7 +238,7 @@ new class extends Component {
 
         if ($this->isEditMode) {
             $appointment = Appointment::find($this->appointmentId);
-            if ($appointment && auth()->user()->role === 'receptionist' && in_array($appointment->status, ['attending', 'attended'])) {
+            if ($appointment && in_array(auth()->user()->role, ['receptionist', 'nurse']) && in_array($appointment->status, ['attending', 'attended'])) {
                 return;
             }
             if ($appointment) {
@@ -256,7 +256,7 @@ new class extends Component {
         $appointment = Appointment::find($id);
         if (!$appointment) return;
 
-        if (auth()->user()->role === 'receptionist' && in_array($appointment->status, ['attending', 'attended'])) {
+        if (in_array(auth()->user()->role, ['receptionist', 'nurse']) && in_array($appointment->status, ['attending', 'attended'])) {
             return;
         }
 
@@ -577,7 +577,7 @@ new class extends Component {
                                     </button>
                                 @endif
                                 @php
-                                    $canEditOrDelete = !(auth()->user()->role === 'receptionist' && in_array($appointment->status, ['attending', 'attended']));
+                                    $canEditOrDelete = !(in_array(auth()->user()->role, ['receptionist', 'nurse']) && in_array($appointment->status, ['attending', 'attended']));
                                 @endphp
                                 @if($canEditOrDelete)
                                     <button wire:click="edit({{ $appointment->id }})" title="Editar Cita"

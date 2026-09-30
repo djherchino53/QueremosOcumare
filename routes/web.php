@@ -17,18 +17,18 @@ Volt::route('/dashboard', 'dashboard')
 Route::middleware(['auth'])->group(function () {
     // Rutas para Médicos, Recepción y Farmacia
     // Rutas para todos los roles autorizados (incluyendo Farmacia para ver pacientes)
-    Route::middleware(['role:super_admin,admin,doctor,receptionist,pharmacist'])->group(function () {
+    Route::middleware(['role:super_admin,admin,doctor,receptionist,pharmacist,nurse'])->group(function () {
         Volt::route('/patients', 'patients.index')->name('patients.index');
         Volt::route('/patients/{patient}', 'patients.show')->name('patients.show');
     });
 
     // Rutas EXCLUYENDO Farmacia (Citas Médicas)
-    Route::middleware(['role:super_admin,admin,doctor,receptionist'])->group(function () {
+    Route::middleware(['role:super_admin,admin,doctor,receptionist,nurse'])->group(function () {
         Volt::route('/appointments', 'appointments.index')->name('appointments.index');
     });
 
     // Rutas para Médicos y Admin (NO Recepción, NO Farmacia)
-    Route::middleware(['role:super_admin,admin,doctor'])->group(function () {
+    Route::middleware(['role:super_admin,admin,doctor,nurse'])->group(function () {
         Volt::route('/medical-histories', 'medical-histories.index')->name('medical-histories.index');
     });
 
@@ -45,7 +45,7 @@ Route::middleware(['auth'])->group(function () {
         Volt::route('/medical-profile/{user?}', 'medical-doctors.profile')->name('medical-doctors.profile');
     });
 
-    Route::middleware(['role:super_admin,admin,pharmacist'])->group(function () {
+    Route::middleware(['role:super_admin,admin,pharmacist,nurse'])->group(function () {
         Volt::route('/supplies', 'supplies.index')->name('supplies.index');
     });
 
