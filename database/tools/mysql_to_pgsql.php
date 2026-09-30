@@ -60,6 +60,9 @@ if ($source->getDriverName() !== 'mysql') {
     exit(1);
 }
 
+// La app trabaja en UTC; sin esto MySQL devuelve las fechas en la hora local del servidor.
+$source->statement("SET time_zone = '+00:00'");
+
 echo "Origen:  {$source->getDatabaseName()} (mysql)\n";
 echo "Destino: " . $target->selectOne('select current_database() as db')->db . " (pgsql)\n\n";
 

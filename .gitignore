@@ -22,3 +22,6 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Volcados con datos de pacientes
+/database/supabase/
