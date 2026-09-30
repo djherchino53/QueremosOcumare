@@ -102,6 +102,7 @@ new class extends Component {
             'doctors' => User::where('role', 'doctor')->orderBy('name')->get(),
             // Para asignar citas: solo médicos activos, más el de la cita que se está editando.
             'canAttend' => $this->canAttend(),
+            'canContinue' => $this->canContinue(),
             'canSeePayments' => $this->canSeePayments(),
             'assignableDoctors' => User::where('role', 'doctor')
                 ->where(fn ($q) => $q->where('is_active', true)->orWhere('id', $this->doctor_id ?: 0))
@@ -265,10 +266,17 @@ new class extends Component {
         $appointment->delete();
     }
 
-    // Atender: solo super_admin y médicos. Ver y cobrar pagos: super_admin, admin y recepción.
+    // Atender (iniciar consulta): super_admin y médicos.
+    // Continuar (cita ya en "Atendiendo"): además, admin.
+    // Ver y cobrar pagos: super_admin, admin y recepción.
     private function canAttend(): bool
     {
         return in_array(auth()->user()->role, ['super_admin', 'doctor']);
+    }
+
+    private function canContinue(): bool
+    {
+        return in_array(auth()->user()->role, ['super_admin', 'doctor', 'admin']);
     }
 
     private function canSeePayments(): bool
@@ -278,9 +286,9 @@ new class extends Component {
 
     public function attendPatient($appointmentId)
     {
-        abort_unless($this->canAttend(), 403);
+        $appointment = Appointment::findOrFail($appointmentId);
 
-        $appointment = Appointment::find($appointmentId);
+        abort_unless($appointment->status === 'attending' ? $this->canContinue() : $this->canAttend(), 403);
         if ($appointment && in_array($appointment->status, ['pending', 'confirmed'])) {
             $appointment->update(['status' => 'attending']);
         }
@@ -590,7 +598,7 @@ new class extends Component {
                         @endif
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                             <div class="flex justify-end gap-2">
-                                @if($canAttend && in_array($appointment->status, ['pending', 'confirmed', 'attending']))
+                                @if(($canAttend && in_array($appointment->status, ['pending', 'confirmed'])) || ($canContinue && $appointment->status === 'attending'))
                                     <button wire:click="attendPatient({{ $appointment->id }})"
                                         class="px-3 py-1 rounded transition text-white flex items-center gap-1 font-semibold text-xs"
                                         style="background-color: {{ $appointment->status === 'attending' ? '#ea580c' : '#16a34a' }};">
