@@ -17,6 +17,7 @@ new class extends Component {
     public $filterPatientId = '';
     public $filterDoctorId = '';
     public $filterDate = '';
+    public $filterFrom = '';
     public $filterMonth = '';
     public $filterYear = '';
 
@@ -41,6 +42,21 @@ new class extends Component {
         $this->filterMonth = date('m');
     }
 
+    // Los filtros "Día" y "Desde" se excluyen: al elegir uno se limpia el otro.
+    public function updatedFilterDate($value)
+    {
+        if ($value) {
+            $this->filterFrom = '';
+        }
+    }
+
+    public function updatedFilterFrom($value)
+    {
+        if ($value) {
+            $this->filterDate = '';
+        }
+    }
+
     public function with()
     {
         $query = Appointment::with(['patient', 'doctor'])->orderBy('date', 'desc');
@@ -57,7 +73,9 @@ new class extends Component {
             $query->where('doctor_id', $this->filterDoctorId);
         }
 
-        if ($this->filterDate) {
+        if ($this->filterFrom) {
+            $query->whereBetween('date', [$this->filterFrom, date('Y-m-d')]);
+        } elseif ($this->filterDate) {
             $query->where('date', $this->filterDate);
         } elseif ($this->filterMonth && $this->filterYear) {
             $query->whereMonth('date', $this->filterMonth)
@@ -341,7 +359,9 @@ new class extends Component {
     <div class="hidden print:block mb-6 border-b pb-4">
         <h1 class="text-3xl font-bold text-gray-800">Reporte de Citas - Queremos Ocumare</h1>
         <p class="text-gray-600">
-            @if($filterDate)
+            @if($filterFrom)
+                Desde: {{ \Carbon\Carbon::parse($filterFrom)->format('d/m/Y') }} hasta {{ date('d/m/Y') }}
+            @elseif($filterDate)
                 Fecha: {{ \Carbon\Carbon::parse($filterDate)->format('d/m/Y') }}
             @elseif($filterMonth)
                 Periodo: {{ $filterMonth }}/{{ $filterYear }}
@@ -362,7 +382,17 @@ new class extends Component {
                 class="rounded-md border-gray-200 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-100 text-xs py-1 px-2">
         </div>
 
-        @if(!$filterDate)
+        <div class="flex items-center gap-2 border-l pl-3">
+            <span class="text-xs font-bold text-gray-200 uppercase whitespace-nowrap">Desde:</span>
+            <input type="date" wire:model.live="filterFrom" max="{{ date('Y-m-d') }}"
+                title="Muestra las citas desde esta fecha hasta hoy"
+                class="rounded-md border-gray-200 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-100 text-xs py-1 px-2">
+            @if($filterFrom)
+                <span class="text-xs text-gray-500 whitespace-nowrap">hasta hoy</span>
+            @endif
+        </div>
+
+        @if(!$filterDate && !$filterFrom)
             <div class="flex items-center gap-2 border-l pl-3">
                 <span class="text-xs font-bold text-gray-200 uppercase whitespace-nowrap">Mes:</span>
                 <select wire:model.live="filterMonth" class="rounded-md border-gray-200 shadow-sm text-xs py-1">
@@ -430,7 +460,7 @@ new class extends Component {
 
         <div class="flex gap-2 ml-auto">
             <button
-                wire:click="$set('filterDate', '{{ date('Y-m-d') }}'); $set('filterMonth', '{{ date('m') }}'); $set('filterYear', '{{ date('Y') }}'); $set('filterStatus', ''); $set('filterPatientId', ''); $set('filterDoctorId', '')"
+                wire:click="$set('filterFrom', ''); $set('filterDate', '{{ date('Y-m-d') }}'); $set('filterMonth', '{{ date('m') }}'); $set('filterYear', '{{ date('Y') }}'); $set('filterStatus', ''); $set('filterPatientId', ''); $set('filterDoctorId', '')"
                 class="px-3 py-1 bg-gray-100 text-gray-600 rounded hover:bg-gray-200 transition text-xs font-bold">
                 Limpiar
             </button>
