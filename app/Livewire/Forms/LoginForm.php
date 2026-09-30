@@ -38,7 +38,8 @@ class LoginForm extends Form
             ]);
         }
 
-        if (! Auth::user()->is_active) {
+        // Solo se bloquea a quien fue desactivado explícitamente.
+        if (Auth::user()->is_active === false) {
             Auth::guard('web')->logout();
 
             throw ValidationException::withMessages([
