@@ -59,7 +59,7 @@ new class extends Component {
 
     public function with()
     {
-        $query = Appointment::with(['patient', 'doctor'])->orderBy('date', 'desc');
+        $query = Appointment::with(['patient', 'doctor.specialties'])->orderBy('date', 'desc');
 
         if ($this->filterStatus) {
             $query->where('status', $this->filterStatus);
@@ -486,6 +486,8 @@ new class extends Component {
                     </th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Médico
                     </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Especialidad
+                    </th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado
                     </th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pago
@@ -507,7 +509,8 @@ new class extends Component {
                                 {{ $appointment->patient->name }}
                             </a>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $appointment->doctor->name }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $appointment->doctor?->name ?? 'Sin asignar' }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $appointment->doctor?->specialties->pluck('name')->join(', ') ?: '—' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm">
                             @php
                                 $colors = [

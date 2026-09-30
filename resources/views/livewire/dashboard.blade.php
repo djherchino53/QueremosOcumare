@@ -31,7 +31,7 @@ new class extends Component {
         ];
 
         // Query Base para Citas de Hoy
-        $appointmentsQuery = Appointment::with(['patient', 'doctor'])
+        $appointmentsQuery = Appointment::with(['patient', 'doctor.specialties'])
             ->whereDate('date', now())
             ->orderBy('time', 'asc');
 
@@ -263,6 +263,8 @@ new class extends Component {
                         </th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Médico
                         </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Especialidad
+                        </th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado
                         </th>
                         <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Acción
@@ -278,7 +280,8 @@ new class extends Component {
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">
                                         {{ $appointment->patient->name }}
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $appointment->doctor->name }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $appointment->doctor?->name ?? 'Sin asignar' }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $appointment->doctor?->specialties->pluck('name')->join(', ') ?: '—' }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm">
                                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
                                                                                                                                                                                                             {{ match ($appointment->status) {
