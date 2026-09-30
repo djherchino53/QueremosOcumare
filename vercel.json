@@ -14,9 +14,11 @@
   "env": {
     "APP_ENV": "production",
     "APP_DEBUG": "false",
+    "APP_URL": "https://queremos-ocumare.vercel.app",
     "DB_CONNECTION": "pgsql",
     "DB_PORT": "5432",
     "DB_DATABASE": "postgres",
+    "DB_USERNAME": "postgres.rrvblchjunqilsbjtnry",
     "DB_SSLMODE": "require",
     "APP_CONFIG_CACHE": "/tmp/config.php",
     "APP_EVENTS_CACHE": "/tmp/events.php",
