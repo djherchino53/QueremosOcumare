@@ -186,7 +186,7 @@ new class extends Component {
     @endif
 
     <div class="flex flex-wrap justify-between items-center gap-3 mb-6">
-        <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Historias Médicas</h1>
+        <h1 class="text-xl md:text-3xl font-bold text-gray-800">Historias Médicas</h1>
         <div class="flex gap-2 items-center">
             @if($patient_id_filter)
                 <span

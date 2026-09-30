@@ -126,7 +126,7 @@ new class extends Component {
 
 <div>
     <div class="flex flex-wrap justify-between items-center gap-3 mb-6 print:hidden">
-        <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Caja y Finanzas</h1>
+        <h1 class="text-xl md:text-3xl font-bold text-gray-800">Caja y Finanzas</h1>
         <div class="flex gap-2">
             <button wire:click="openModal('in')"
                 class="bg-green-100 text-green-700 px-3 py-1 rounded hover:bg-green-200 transition text-white hover:text-white flex items-center gap-1"
@@ -142,7 +142,7 @@ new class extends Component {
 
     <!-- Print Header (only visible when printing) -->
     <div class="hidden print:block mb-6 border-b pb-4">
-        <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Reporte de Caja - Queremos Ocumare</h1>
+        <h1 class="text-xl md:text-3xl font-bold text-gray-800">Reporte de Caja - Queremos Ocumare</h1>
         <p class="text-gray-600">
             @if($filterDate)
                 Fecha: {{ \Carbon\Carbon::parse($filterDate)->format('d/m/Y') }}

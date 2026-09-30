@@ -11,7 +11,7 @@ new class extends Component { };
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
         </button>
-        <span class="ml-2 text-lg font-semibold text-gray-800 md:hidden truncate">Queremos Ocumare</span>
+        <span class="ml-2 text-base font-semibold text-gray-800 md:hidden truncate">Queremos Ocumare</span>
     </div>
 
     <div class="flex items-center space-x-4 shrink-0">

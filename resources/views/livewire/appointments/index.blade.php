@@ -348,7 +348,7 @@ new class extends Component {
 
 <div>
     <div class="flex flex-wrap justify-between items-center gap-3 mb-6 print:hidden">
-        <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Citas Médicas</h1>
+        <h1 class="text-xl md:text-3xl font-bold text-gray-800">Citas Médicas</h1>
         <button wire:click="openModal"
             class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition font-bold shadow-sm">
             + Nueva Cita
@@ -357,7 +357,7 @@ new class extends Component {
 
     <!-- Print Header -->
     <div class="hidden print:block mb-6 border-b pb-4">
-        <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Reporte de Citas - Queremos Ocumare</h1>
+        <h1 class="text-xl md:text-3xl font-bold text-gray-800">Reporte de Citas - Queremos Ocumare</h1>
         <p class="text-gray-600">
             @if($filterFrom)
                 Desde: {{ \Carbon\Carbon::parse($filterFrom)->format('d/m/Y') }} hasta {{ date('d/m/Y') }}

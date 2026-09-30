@@ -181,7 +181,7 @@ new class extends Component {
     @endif
 
     <div class="flex flex-wrap justify-between items-center gap-3 mb-6">
-        <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Control de Insumos - Farmacia</h1>
+        <h1 class="text-xl md:text-3xl font-bold text-gray-800">Control de Insumos - Farmacia</h1>
         <div class="flex gap-2">
             <input wire:model.live="search" type="text" placeholder="Buscar insumo"
                 class="rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
@@ -269,7 +269,7 @@ new class extends Component {
     <!-- Historial de Movimientos -->
     <div class="mt-12 bg-white rounded-lg shadow overflow-x-auto border border-gray-200">
         <div class="px-6 py-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
-            <h2 class="text-lg md:text-xl font-bold text-gray-800">Recientes Movimientos de Farmacia</h2>
+            <h2 class="text-base md:text-xl font-bold text-gray-800">Recientes Movimientos de Farmacia</h2>
             <span class="text-xs text-gray-500 uppercase tracking-widest font-bold">Registro de Controles</span>
         </div>
         <table class="w-full divide-y divide-gray-200">
@@ -323,7 +323,7 @@ new class extends Component {
             <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                 <div class="p-8" id="printable-constancia">
                     <div class="text-center mb-8">
-                        <h2 class="text-xl md:text-2xl font-bold text-gray-900">CONSTANCIA DE MOVIMIENTO</h2>
+                        <h2 class="text-lg md:text-2xl font-bold text-gray-900">CONSTANCIA DE MOVIMIENTO</h2>
                         <p class="text-gray-500">Queremos Ocumare - Gestión Médica</p>
                     </div>
 
