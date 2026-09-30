@@ -3,6 +3,7 @@ use Livewire\Volt\Component;
 use App\Models\Appointment;
 use App\Models\Patient;
 use App\Models\User;
+use Illuminate\Validation\Rule;
 
 use App\Models\CashMovement;
 
@@ -80,7 +81,13 @@ new class extends Component {
         return [
             'appointmentsList' => $query->get(),
             'patients' => $patientsQuery->get(),
-            'doctors' => User::where('role', 'doctor')->with('specialties.estudios')->orderBy('name')->get(),
+            'doctors' => User::where('role', 'doctor')->orderBy('name')->get(),
+            // Para asignar citas: solo médicos activos, más el de la cita que se está editando.
+            'assignableDoctors' => User::where('role', 'doctor')
+                ->where(fn ($q) => $q->where('is_active', true)->orWhere('id', $this->doctor_id ?: 0))
+                ->with('specialties.estudios')
+                ->orderBy('name')
+                ->get(),
         ];
     }
 
@@ -131,7 +138,12 @@ new class extends Component {
     {
         return [
             'patient_id' => 'required|exists:patients,id',
-            'doctor_id' => 'required|exists:users,id',
+            'doctor_id' => [
+                'required',
+                Rule::exists('users', 'id')->where(fn ($q) => $q->where('role', 'doctor')
+                    ->where(fn ($q) => $q->where('is_active', true)
+                        ->orWhere('id', $this->appointmentId ? Appointment::find($this->appointmentId)?->doctor_id : 0))),
+            ],
             'date' => 'required|date|after_or_equal:today',
             'time' => 'required',
             'status' => 'required',
@@ -595,7 +607,7 @@ new class extends Component {
                                 <select wire:model.live="doctor_id"
                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                                     <option value="">Seleccione Médico</option>
-                                    @foreach($doctors as $doctor)
+                                    @foreach($assignableDoctors as $doctor)
                                         <option value="{{ $doctor->id }}">
                                             {{ $doctor->name }}
                                             @if($doctor->specialties->count() > 0)

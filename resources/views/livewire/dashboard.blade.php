@@ -6,6 +6,7 @@ use App\Models\Supply;
 use App\Models\User;
 use App\Models\MedicalHistory;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 use App\Models\CashMovement;
 
@@ -54,6 +55,7 @@ new class extends Component {
             'isDoctor' => $isDoctor,
             'patients' => Patient::orderBy('name')->get(),
             'doctors' => User::where('role', 'doctor')
+                ->active()
                 ->with(['specialties.estudios', 'doctorProfile'])
                 ->orderBy('name')
                 ->get(),
@@ -121,7 +123,7 @@ new class extends Component {
     {
         $this->validate([
             'patient_id' => 'required|exists:patients,id',
-            'doctor_id' => 'required|exists:users,id',
+            'doctor_id' => ['required', Rule::exists('users', 'id')->where('role', 'doctor')->where('is_active', true)],
             'date' => 'required|date|after_or_equal:today',
             'time' => 'required',
             'status' => 'required',

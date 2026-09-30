@@ -18,9 +18,24 @@ new class extends Component {
                 ->where(fn ($q) => $q->whereLike('name', '%' . $this->search . '%')
                     ->orWhereLike('email', '%' . $this->search . '%'))
                 ->with(['specialties', 'doctorProfile'])
+                ->orderByDesc('is_active')
+                ->orderBy('name')
                 ->get(),
+            'canToggleActive' => in_array(auth()->user()->role, ['super_admin', 'admin']),
             'allSpecialties' => MedicalSpecialty::orderBy('name')->get(),
         ];
+    }
+
+    public function toggleActive($doctorId)
+    {
+        abort_unless(in_array(auth()->user()->role, ['super_admin', 'admin']), 403);
+
+        $doctor = User::where('role', 'doctor')->findOrFail($doctorId);
+        $doctor->update(['is_active' => ! $doctor->is_active]);
+
+        session()->flash('message', $doctor->is_active
+            ? "{$doctor->name} fue activado."
+            : "{$doctor->name} fue desactivado. Ya no puede iniciar sesión ni recibir citas nuevas; su historial se conserva.");
     }
 
     public function openSpecialtyModal($doctorId)
@@ -63,17 +78,29 @@ new class extends Component {
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         @foreach($doctors as $doctor)
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition">
+            <div wire:key="doctor-{{ $doctor->id }}"
+                class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition {{ $doctor->is_active ? '' : 'opacity-60' }}">
                 <div class="p-5">
                     <div class="flex items-center gap-4 mb-4">
                         <div
-                            class="h-12 w-12 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold text-xl uppercase">
+                            class="h-12 w-12 rounded-full {{ $doctor->is_active ? 'bg-indigo-100 text-indigo-700' : 'bg-gray-200 text-gray-500' }} flex items-center justify-center font-bold text-xl uppercase">
                             {{ substr($doctor->name, 0, 1) }}
                         </div>
-                        <div>
+                        <div class="flex-1 min-w-0">
                             <h3 class="font-bold text-gray-900">{{ $doctor->name }}</h3>
                             <p class="text-xs text-gray-500">{{ $doctor->email }}</p>
                         </div>
+                        @if ($canToggleActive)
+                            <label class="flex items-center gap-2 cursor-pointer select-none">
+                                <input type="checkbox" @checked($doctor->is_active)
+                                    wire:click.prevent="toggleActive({{ $doctor->id }})"
+                                    wire:confirm="{{ $doctor->is_active ? '¿Desactivar a ' . $doctor->name . '? No podrá iniciar sesión ni recibir citas nuevas.' : '¿Activar a ' . $doctor->name . '?' }}"
+                                    class="rounded text-indigo-600 focus:ring-indigo-500 h-4 w-4">
+                                <span class="text-xs font-bold {{ $doctor->is_active ? 'text-green-700' : 'text-gray-500' }}">
+                                    {{ $doctor->is_active ? 'Activo' : 'Inactivo' }}
+                                </span>
+                            </label>
+                        @endif
                     </div>
 
                     <div class="space-y-3">

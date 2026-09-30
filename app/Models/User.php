@@ -24,7 +24,13 @@ class User extends Authenticatable
         'role',
         'phone',
         'dni',
+        'is_active',
     ];
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
 
     public function medicalHistories()
     {
@@ -66,6 +72,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_active' => 'boolean',
         ];
     }
 }
