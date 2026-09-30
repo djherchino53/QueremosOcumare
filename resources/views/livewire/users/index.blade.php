@@ -2,6 +2,7 @@
 use Livewire\Volt\Component;
 use App\Models\User;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 new class extends Component {
@@ -77,7 +78,33 @@ new class extends Component {
 
     public function delete($id)
     {
-        User::find($id)->delete();
+        $user = User::find($id);
+
+        if (! $user) {
+            return;
+        }
+
+        if ($user->id === auth()->id()) {
+            session()->flash('error', 'No puedes eliminar tu propio usuario.');
+            return;
+        }
+
+        // Registros que perderían a su responsable si se elimina el usuario.
+        $related = array_filter([
+            'citas' => DB::table('appointments')->where('doctor_id', $user->id)->count(),
+            'historias médicas' => DB::table('medical_histories')->where('doctor_id', $user->id)->count(),
+            'movimientos de caja' => DB::table('cash_movements')->where('user_id', $user->id)->count(),
+            'movimientos de inventario' => DB::table('supply_movements')->where('user_id', $user->id)->count(),
+        ]);
+
+        if ($related) {
+            $detail = collect($related)->map(fn ($count, $label) => "$count $label")->join(', ', ' y ');
+            session()->flash('error', "No se puede eliminar a {$user->name} porque tiene $detail registrados a su nombre.");
+            return;
+        }
+
+        $user->delete();
+        session()->flash('message', "Usuario {$user->name} eliminado.");
     }
 };
 ?>
@@ -90,6 +117,18 @@ new class extends Component {
             Crear Usuario
         </button>
     </div>
+
+    @if (session()->has('message'))
+        <div class="mb-4 p-4 bg-green-50 border-l-4 border-green-500 text-green-700">
+            {{ session('message') }}
+        </div>
+    @endif
+
+    @if (session()->has('error'))
+        <div class="mb-4 p-4 bg-red-50 border-l-4 border-red-500 text-red-700">
+            {{ session('error') }}
+        </div>
+    @endif
 
     <div class="bg-white rounded-lg shadow overflow-hidden border border-gray-200">
         <table class="w-full divide-y divide-gray-200">
