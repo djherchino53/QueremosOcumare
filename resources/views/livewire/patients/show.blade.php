@@ -33,9 +33,9 @@ new class extends Component {
 ?>
 
 <div>
-    <div class="flex justify-between items-center mb-6">
+    <div class="flex flex-wrap justify-between items-center gap-3 mb-6">
         <div>
-            <h1 class="text-3xl font-bold text-gray-800">Expediente del Paciente</h1>
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Expediente del Paciente</h1>
             <p class="text-gray-500 text-sm">Gestiona la información y el historial clínico completo</p>
         </div>
         <a href="{{ route('patients.index') }}" wire:navigate
@@ -63,7 +63,7 @@ new class extends Component {
         </div>
         <div class="pt-16 pb-8 px-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <div class="md:pl-40">
-                <h2 class="text-2xl font-black text-gray-800 uppercase tracking-tight">{{ $patient->name }}</h2>
+                <h2 class="text-xl md:text-2xl font-black text-gray-800 uppercase tracking-tight">{{ $patient->name }}</h2>
                 <div class="flex flex-wrap gap-4 mt-2">
                     <span
                         class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-600 border border-gray-200 uppercase">

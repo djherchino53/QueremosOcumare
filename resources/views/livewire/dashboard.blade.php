@@ -148,7 +148,7 @@ new class extends Component {
 ?>
 
 <div>
-    <h1 class="text-3xl font-bold text-gray-800 mb-6">Hola, {{ auth()->user()->name }}</h1>
+    <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6">Hola, {{ auth()->user()->name }}</h1>
 
     <!-- Stats Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -157,7 +157,7 @@ new class extends Component {
             class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 flex items-center justify-between hover:shadow-md transition cursor-pointer group">
             <div>
                 <h3 class="text-gray-500 text-sm font-medium group-hover:text-indigo-600 transition">Citas Hoy</h3>
-                <p class="text-3xl font-bold text-indigo-600 mt-2">{{ $stats['appointments_today'] }}</p>
+                <p class="text-2xl md:text-3xl font-bold text-indigo-600 mt-2">{{ $stats['appointments_today'] }}</p>
             </div>
             <div class="p-3 bg-indigo-50 rounded-full text-indigo-600 group-hover:bg-indigo-100 transition">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -174,7 +174,7 @@ new class extends Component {
             <div>
                 <h3 class="text-gray-500 text-sm font-medium group-hover:text-orange-600 transition">Citas Pendientes
                 </h3>
-                <p class="text-3xl font-bold text-orange-500 mt-2">{{ $stats['appointments_pending'] }}</p>
+                <p class="text-2xl md:text-3xl font-bold text-orange-500 mt-2">{{ $stats['appointments_pending'] }}</p>
             </div>
             <div class="p-3 bg-orange-50 rounded-full text-orange-600 group-hover:bg-orange-100 transition">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -191,7 +191,7 @@ new class extends Component {
                 <h3 class="text-gray-500 text-sm font-medium group-hover:text-green-600 transition">
                     {{ $isDoctor ? 'Pacientes Atendidos' : 'Pacientes Totales' }}
                 </h3>
-                <p class="text-3xl font-bold text-gray-800 mt-2">
+                <p class="text-2xl md:text-3xl font-bold text-gray-800 mt-2">
                     {{ $isDoctor ? $stats['patients_attended'] : $stats['total_patients'] }}
                 </p>
             </div>
@@ -210,7 +210,7 @@ new class extends Component {
                 class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 flex items-center justify-between hover:shadow-md transition cursor-pointer group">
                 <div>
                     <h3 class="text-gray-500 text-sm font-medium group-hover:text-red-600 transition">Insumos Críticos</h3>
-                    <p class="text-3xl font-bold text-red-600 mt-2">{{ $stats['critical_supplies'] }}</p>
+                    <p class="text-2xl md:text-3xl font-bold text-red-600 mt-2">{{ $stats['critical_supplies'] }}</p>
                 </div>
                 <div class="p-3 bg-red-50 rounded-full text-red-600 group-hover:bg-red-100 transition">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -254,6 +254,7 @@ new class extends Component {
         @endif
 
         @if($todayAppointments->count() > 0)
+            <div class="overflow-x-auto">
             <table class="w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
@@ -311,6 +312,7 @@ new class extends Component {
                     @endforeach
                 </tbody>
             </table>
+            </div>
         @else
             <div class="p-12 text-center text-gray-500 flex flex-col items-center gap-3">
                 <svg class="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">

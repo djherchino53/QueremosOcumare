@@ -78,8 +78,8 @@ new class extends Component {
 ?>
 
 <div>
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold text-gray-800">Reportes y Estadísticas</h1>
+    <div class="flex flex-wrap justify-between items-center gap-3 mb-6">
+        <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Reportes y Estadísticas</h1>
         <div class="flex gap-4 bg-white p-2 rounded-lg shadow-sm border border-gray-100">
             <div class="flex items-center gap-2">
                 <label class="text-xs font-bold text-gray-400 uppercase">Desde:</label>

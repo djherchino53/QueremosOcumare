@@ -185,8 +185,8 @@ new class extends Component {
         </div>
     @endif
 
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold text-gray-800">Historias Médicas</h1>
+    <div class="flex flex-wrap justify-between items-center gap-3 mb-6">
+        <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Historias Médicas</h1>
         <div class="flex gap-2 items-center">
             @if($patient_id_filter)
                 <span
@@ -205,7 +205,7 @@ new class extends Component {
         </div>
     </div>
 
-    <div class="bg-white rounded-lg shadow overflow-hidden border border-gray-200">
+    <div class="bg-white rounded-lg shadow overflow-x-auto border border-gray-200">
         <table class="w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
                 <tr>

@@ -54,7 +54,7 @@ new class extends Component {
 
 <div>
     <div class="max-w-7xl mx-auto">
-        <h1 class="text-3xl font-bold text-gray-800 mb-8 border-l-8 border-indigo-600 pl-4">Perfil Médico: {{ $name }}
+        <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-8 border-l-8 border-indigo-600 pl-4">Perfil Médico: {{ $name }}
         </h1>
 
         @if (session()->has('message'))
@@ -77,7 +77,7 @@ new class extends Component {
                             class="h-24 w-24 rounded-full bg-indigo-600 flex items-center justify-center text-white text-4xl font-black uppercase mx-auto mb-4 shadow-lg ring-4 ring-indigo-50">
                             {{ substr($name, 0, 1) }}
                         </div>
-                        <h2 class="text-xl font-bold text-gray-900">{{ $name }}</h2>
+                        <h2 class="text-lg md:text-xl font-bold text-gray-900">{{ $name }}</h2>
                         <p class="text-indigo-600 font-semibold text-sm mb-4 uppercase tracking-wider">Médico
                             Especialista
                         </p>

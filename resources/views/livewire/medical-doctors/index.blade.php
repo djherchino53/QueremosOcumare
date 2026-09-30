@@ -61,8 +61,8 @@ new class extends Component {
 ?>
 
 <div>
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold text-gray-800">Médicos</h1>
+    <div class="flex flex-wrap justify-between items-center gap-3 mb-6">
+        <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Médicos</h1>
     </div>
 
     @if (session()->has('message'))
