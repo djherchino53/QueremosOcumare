@@ -4,18 +4,19 @@ new class extends Component { };
 ?>
 
 <div class="flex items-center justify-between w-full">
-    <div class="flex items-center">
-        <button class="md:hidden text-gray-500 hover:text-gray-700 focus:outline-none">
+    <div class="flex items-center min-w-0">
+        <button type="button" @click="$dispatch('toggle-sidebar')" aria-controls="sidebar" aria-label="Abrir menú"
+            class="md:hidden -ml-2 p-2 text-gray-500 hover:text-gray-700 focus:outline-none">
             <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
         </button>
-        <span class="ml-4 text-xl font-semibold text-gray-800 md:hidden">Queremos Ocumare</span>
+        <span class="ml-2 text-lg font-semibold text-gray-800 md:hidden truncate">Queremos Ocumare</span>
     </div>
 
-    <div class="flex items-center space-x-4">
+    <div class="flex items-center space-x-4 shrink-0">
         <div class="relative flex items-center gap-2">
-            <span class="text-sm font-medium text-gray-700">{{ auth()->user()->name ?? 'Usuario' }}</span>
+            <span class="hidden sm:inline text-sm font-medium text-gray-700">{{ auth()->user()->name ?? 'Usuario' }}</span>
             <div class="h-8 w-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold">
                 {{ substr(auth()->user()->name ?? 'U', 0, 1) }}
             </div>
