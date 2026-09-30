@@ -15,8 +15,8 @@ new class extends Component {
     {
         return [
             'doctors' => User::where('role', 'doctor')
-                ->where('name', 'like', '%' . $this->search . '%')
-                ->orwhere('email', 'like', '%' . $this->search . '%')
+                ->where(fn ($q) => $q->whereLike('name', '%' . $this->search . '%')
+                    ->orWhereLike('email', '%' . $this->search . '%'))
                 ->with(['specialties', 'doctorProfile'])
                 ->get(),
             'allSpecialties' => MedicalSpecialty::orderBy('name')->get(),

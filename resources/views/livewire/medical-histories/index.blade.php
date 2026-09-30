@@ -45,8 +45,8 @@ new class extends Component {
 
         if ($this->search) {
             $query->whereHas('patient', function ($q) {
-                $q->where('name', 'like', '%' . $this->search . '%')
-                    ->orWhere('dni', 'like', '%' . $this->search . '%');
+                $q->whereLike('name', '%' . $this->search . '%')
+                    ->orWhereLike('dni', '%' . $this->search . '%');
             });
         }
 

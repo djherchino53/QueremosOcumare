@@ -21,11 +21,15 @@ new class extends Component {
         $start = $this->startDate;
         $end = $this->endDate;
 
+        $month = fn (string $column) => DB::getDriverName() === 'pgsql'
+            ? "to_char($column, 'YYYY-MM')"
+            : "DATE_FORMAT($column, '%Y-%m')";
+
         // Financial Data
         $finances = CashMovement::select(
-            DB::raw('DATE_FORMAT(date, "%Y-%m") as month'),
-            DB::raw('SUM(CASE WHEN type = "in" THEN amount ELSE 0 END) as income'),
-            DB::raw('SUM(CASE WHEN type = "out" THEN amount ELSE 0 END) as expense')
+            DB::raw($month('date') . ' as month'),
+            DB::raw("SUM(CASE WHEN type = 'in' THEN amount ELSE 0 END) as income"),
+            DB::raw("SUM(CASE WHEN type = 'out' THEN amount ELSE 0 END) as expense")
         )
             ->whereBetween('date', [$start, $end])
             ->groupBy('month')
@@ -42,7 +46,7 @@ new class extends Component {
             ->get();
 
         // Patient Growth/Mobility
-        $patientStats = Patient::select(DB::raw('DATE_FORMAT(created_at, "%Y-%m") as month'), DB::raw('count(*) as total'))
+        $patientStats = Patient::select(DB::raw($month('created_at') . ' as month'),DB::raw('count(*) as total'))
             ->whereBetween('created_at', [$start . ' 00:00:00', $end . ' 23:59:59'])
             ->groupBy('month')
             ->orderBy('month')

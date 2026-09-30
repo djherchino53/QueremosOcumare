@@ -22,8 +22,8 @@ new class extends Component {
     public function with()
     {
         return [
-            'suppliesList' => Supply::where('name', 'like', '%' . $this->search . '%')
-            ->orwhere('description', 'like', '%' . $this->search . '%')
+            'suppliesList' => Supply::whereLike('name', '%' . $this->search . '%')
+            ->orWhereLike('description', '%' . $this->search . '%')
             ->get(),
             'recentMovements' => SupplyMovement::with(['supply', 'patient', 'user'])->orderBy('date', 'desc')->latest()->take(10)->get(),
             'patients' => Patient::orderBy('name')->get(),

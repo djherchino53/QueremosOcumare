@@ -14,8 +14,8 @@ new class extends Component {
     public function with()
     {
         return [
-            'patientsList' => Patient::where('name', 'like', '%' . $this->search . '%')
-                ->orWhere('dni', 'like', '%' . $this->search . '%')
+            'patientsList' => Patient::whereLike('name', '%' . $this->search . '%')
+                ->orWhereLike('dni', '%' . $this->search . '%')
                 ->get()
         ];
     }

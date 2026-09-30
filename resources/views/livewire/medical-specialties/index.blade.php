@@ -17,7 +17,7 @@ new class extends Component {
     {
         return [
             'specialties' => MedicalSpecialty::with('estudios')
-                ->where('name', 'like', '%' . $this->search . '%')
+                ->whereLike('name', '%' . $this->search . '%')
                 ->orderBy('name')
                 ->get(),
         ];
