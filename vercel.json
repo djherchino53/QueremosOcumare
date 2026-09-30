@@ -3,6 +3,7 @@
   "framework": null,
   "buildCommand": "npm run build",
   "outputDirectory": "public",
+  "regions": ["yul1"],
   "functions": {
     "api/index.php": { "runtime": "vercel-php@0.7.4" }
   },
@@ -16,6 +17,7 @@
     "APP_DEBUG": "false",
     "APP_URL": "https://queremos-ocumare.vercel.app",
     "DB_CONNECTION": "pgsql",
+    "DB_HOST": "aws-0-ca-central-1.pooler.supabase.com",
     "DB_PORT": "5432",
     "DB_DATABASE": "postgres",
     "DB_USERNAME": "postgres.rrvblchjunqilsbjtnry",
